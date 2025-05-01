@@ -25,11 +25,13 @@ func SaveLink(repo shortlink.Repo) http.HandlerFunc {
 		originalURL := string(b)
 		if originalURL == "" {
 			http.Error(w, "URL parameter is missing", http.StatusBadRequest)
+			return
 		}
 
 		shortKey, err := repo.SaveURL(r.Context(), originalURL)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 		log.Printf("link: %s successfuly savad with shortKey: %s", originalURL, shortKey)
 
