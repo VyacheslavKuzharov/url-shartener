@@ -4,9 +4,9 @@ import (
 	"github.com/VyacheslavKuzharov/url-shortener/internal/api"
 	"github.com/VyacheslavKuzharov/url-shortener/internal/repository"
 	"github.com/VyacheslavKuzharov/url-shortener/pkg/httpserver"
+	"github.com/go-chi/chi/v5"
 	"log"
 	"net"
-	"net/http"
 )
 
 func Run() error {
@@ -16,7 +16,7 @@ func Run() error {
 	repo := repository.New()
 
 	// HTTP
-	mux := http.NewServeMux()
+	mux := chi.NewRouter()
 	api.RegisterRoutes(mux, repo)
 
 	httpServer := httpserver.New(mux)
