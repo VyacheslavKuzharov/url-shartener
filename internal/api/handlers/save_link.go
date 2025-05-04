@@ -2,13 +2,14 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/VyacheslavKuzharov/url-shortener/config"
 	"github.com/VyacheslavKuzharov/url-shortener/internal/repository/shortlink"
 	"io"
 	"log"
 	"net/http"
 )
 
-func SaveLink(repo shortlink.Repo) http.HandlerFunc {
+func SaveLink(repo shortlink.Repo, cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Started ShortenUrl handler. Method %s", r.Method)
 
@@ -36,7 +37,7 @@ func SaveLink(repo shortlink.Repo) http.HandlerFunc {
 		log.Printf("link: %s successfuly savad with shortKey: %s", originalURL, shortKey)
 
 		// Construct the full shortened URL
-		shortenedURL := fmt.Sprintf("http://localhost:8080/%s", shortKey)
+		shortenedURL := fmt.Sprintf("%s/%s", cfg.BaseURL.Addr, shortKey)
 
 		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(http.StatusCreated)

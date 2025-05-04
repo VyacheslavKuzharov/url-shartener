@@ -1,13 +1,16 @@
 package main
 
 import (
+	"github.com/VyacheslavKuzharov/url-shortener/config"
 	"github.com/VyacheslavKuzharov/url-shortener/internal/app"
 	"log"
 )
 
 func main() {
-	err := app.Run()
+	cfg, err := config.New()
 	if err != nil {
-		log.Fatalf("app error: %s", err)
+		log.Fatalf("config error: %s", err)
 	}
+
+	app.Run(cfg)
 }

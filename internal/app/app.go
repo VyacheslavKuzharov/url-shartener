@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/VyacheslavKuzharov/url-shortener/config"
 	"github.com/VyacheslavKuzharov/url-shortener/internal/api"
 	"github.com/VyacheslavKuzharov/url-shortener/internal/repository"
 	"github.com/VyacheslavKuzharov/url-shortener/pkg/httpserver"
@@ -9,7 +10,7 @@ import (
 	"net"
 )
 
-func Run() error {
+func Run(cfg *config.Config) {
 	log.Println("Starting url-shortener application...")
 
 	// Repo
@@ -17,11 +18,9 @@ func Run() error {
 
 	// HTTP
 	mux := chi.NewRouter()
-	api.RegisterRoutes(mux, repo)
+	api.RegisterRoutes(mux, repo, cfg)
 
 	httpServer := httpserver.New(mux)
-	log.Printf("Start HTTP server on: %s", net.JoinHostPort(httpserver.DefaultHost, httpserver.DefaultPort))
-	httpServer.Start(httpserver.DefaultHost, httpserver.DefaultPort)
-
-	return nil
+	log.Printf("Start HTTP server on: %s", net.JoinHostPort(cfg.HTTP.Host, cfg.HTTP.Port))
+	httpServer.Start(cfg.HTTP.Host, cfg.HTTP.Port)
 }
