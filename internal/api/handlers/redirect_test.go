@@ -3,6 +3,8 @@ package handlers
 import (
 	"context"
 	"errors"
+	"github.com/VyacheslavKuzharov/url-shortener/config/log"
+	"github.com/VyacheslavKuzharov/url-shortener/pkg/logger"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +12,8 @@ import (
 )
 
 func TestRedirect(t *testing.T) {
+	l := logger.New(log.InfoLevel)
+
 	originalURL := "https://practicum.yandex.ru/"
 	success := func(ctx context.Context, key string) (string, error) { return originalURL, nil }
 	fail := func(ctx context.Context, key string) (string, error) { return "", errors.New("short key not found") }
@@ -53,7 +57,7 @@ func TestRedirect(t *testing.T) {
 			r := httptest.NewRequest(tc.method, tc.request, nil)
 			w := httptest.NewRecorder()
 
-			h := Redirect(tc.repo)
+			h := Redirect(tc.repo, l)
 			h(w, r)
 
 			res := w.Result()
