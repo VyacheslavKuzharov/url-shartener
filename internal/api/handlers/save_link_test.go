@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/VyacheslavKuzharov/url-shortener/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"io"
@@ -16,6 +17,7 @@ func TestSaveLink(t *testing.T) {
 	shortKey := `qwerty`
 	expectedBody := fmt.Sprintf("http://localhost:8080/%s", shortKey)
 	originalURL := "https://practicum.yandex.ru/"
+	cfg, _ := config.New()
 	success := func(ctx context.Context, originalURL string) (string, error) { return shortKey, nil }
 
 	testCases := []struct {
@@ -57,7 +59,7 @@ func TestSaveLink(t *testing.T) {
 			r := httptest.NewRequest(tc.method, "/", tc.reqBody)
 			w := httptest.NewRecorder()
 
-			h := SaveLink(tc.repo)
+			h := SaveLink(tc.repo, cfg)
 			h(w, r)
 
 			res := w.Result()

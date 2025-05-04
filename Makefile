@@ -65,3 +65,11 @@ migrate-up-force: ### migration up force to fix DB on
 migrate-down: ### migration down
 	migrate -path migrations -database '$(PG_URL)?sslmode=disable' down $(STEP)
 .PHONY: db-migrate-down
+
+lint: ### run golangci-lint run
+	golangci-lint run
+.PHONY: lint
+
+vet: ### run go vet -vettool
+	go vet -vettool=$(which statictest) ./...
+.PHONY: vet
