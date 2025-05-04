@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"github.com/VyacheslavKuzharov/url-shortener/config"
 	"github.com/VyacheslavKuzharov/url-shortener/internal/repository/shortlink"
+	"github.com/rs/zerolog"
 	"io"
-	"log"
 	"net/http"
 )
 
-func SaveLink(repo shortlink.Repo, cfg *config.Config) http.HandlerFunc {
+func SaveLink(repo shortlink.Repo, cfg *config.Config, log zerolog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Started ShortenUrl handler. Method %s", r.Method)
+		log.Info().Msgf("Started ShortenUrl handler. Method %s", r.Method)
 
 		if r.Method != http.MethodPost {
 			http.Error(w, "Only POST requests allowed!", http.StatusMethodNotAllowed)
@@ -34,7 +34,7 @@ func SaveLink(repo shortlink.Repo, cfg *config.Config) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		log.Printf("link: %s successfuly savad with shortKey: %s", originalURL, shortKey)
+		log.Info().Msgf("link: %s successfuly savad with shortKey: %s", originalURL, shortKey)
 
 		// Construct the full shortened URL
 		shortenedURL := fmt.Sprintf("%s/%s", cfg.BaseURL.Addr, shortKey)

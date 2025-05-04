@@ -4,11 +4,13 @@ import (
 	"flag"
 	cfgURL "github.com/VyacheslavKuzharov/url-shortener/config/base_url"
 	cfgHTTP "github.com/VyacheslavKuzharov/url-shortener/config/http"
+	cfgLog "github.com/VyacheslavKuzharov/url-shortener/config/log"
 )
 
 type Config struct {
 	HTTP    *cfgHTTP.HTTP
 	BaseURL *cfgURL.BaseURL
+	Log     *cfgLog.Log
 }
 
 func New() (*Config, error) {
@@ -17,6 +19,7 @@ func New() (*Config, error) {
 	return &Config{
 		HTTP:    addr.Build(),
 		BaseURL: baseURL.Build(),
+		Log:     cfgLog.New(),
 	}, nil
 }
 
