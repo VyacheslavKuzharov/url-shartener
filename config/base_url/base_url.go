@@ -23,7 +23,6 @@ func (b *BaseURL) Build() *BaseURL {
 	}
 
 	schema := "http"
-
 	return &BaseURL{
 		Addr: fmt.Sprintf("%s://%s", schema, net.JoinHostPort(httpserver.DefaultHost, httpserver.DefaultPort)),
 	}
